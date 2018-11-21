@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Aleksandr Stoev](https://up.htmlacademy.ru/javascript/16/user/682755).
-* Наставник: `Неизвестно`.
+* Наставник: `Никита Ткачук`.
 
 ---
 
