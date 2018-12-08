@@ -173,11 +173,12 @@ var generatedCard = function () {
 
 generatedCard();
 
+// добавим в форму элементы форм атрибуты если на ней есть класс .ad-form--disabled;
 // объявим форму
 var form = document.querySelector('.ad-form');
 // найдем все элементы fieldset
 var formFieldsets = form.querySelectorAll('fieldset');
-// соберем их всех через цикл
+// соберем их всех через цикл и если на форме есть .ad-form--disabled добавим им атрибут disabled
 
 var disFieldset = function () {
   for (var i = 0; i < formFieldsets.length; i++) {
@@ -217,7 +218,7 @@ var disSelect = function () {
 };
 
 disSelect();
-// функция чтобы убрать класс hidden
+// функция что бы убрать класс hidden
 var mapPins = document.querySelectorAll('.map__pin');
 
 var pinDelHidden = function () {
@@ -227,13 +228,59 @@ var pinDelHidden = function () {
 };
 // сэмулируем перетаскивание метки
 var mainPin = document.querySelector('.map__pin--main');
-
-mainPin.addEventListener('click', function () {
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
   pinDelHidden();
   disSelect();
   disFieldset();
+
+  var coordsPin = {
+    x: evt.pageX,
+    y: evt.pageY
+  };
+
+  var onMouseMov = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: coordsPin.x - moveEvt.pageX,
+      y: coordsPin.y - moveEvt.pageY
+    };
+
+    var limits = {
+      top: map.offsetTop + mainPin.offsetHeight + 30,
+      right: map.offsetWidth + map.offsetLeft - mainPin.clientWidth / 2,
+      bottom: map.offsetHeight + map.offsetTop - mainPin.offsetHeight - 84,
+      left: map.offsetLeft + mainPin.clientWidth / 2
+    };
+
+    coordsPin = {
+      x: moveEvt.pageX,
+      y: moveEvt.pageY
+    };
+    // при движении изменяем координаты на которые указывает наш пин
+    var addressLeft = mainPin.offsetLeft + 32.5;
+    var addressTop = mainPin.offsetTop + 65;
+    inputAdress.value = addressLeft + '\, ' + addressTop;
+
+    if ((coordsPin.x > limits.left && coordsPin.x < limits.right) &&
+    (coordsPin.y > limits.top && coordsPin.y < limits.bottom)){
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMov);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMov);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 // устанавливаем координаты на которые указывает наш пин
