@@ -31,7 +31,7 @@
     fragment.appendChild(renderPin(window.data.appartments[i], i));
   }
 
-  //  -----------------------------DRAG-N-DROP-----------------------
+  //DRAG-N-DROP
   var pinHandler = document.querySelector('.map__pin--main');
 
   pinHandler.addEventListener('mousedown', function (evt) {
