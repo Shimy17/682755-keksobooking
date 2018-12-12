@@ -1,85 +1,116 @@
-'use strict'
-var authorPin = document.querySelector('#pin')
-    .content
-    .querySelector('.map__pin');
+(function () {
+  'use strict';
 
-  var mapPinTemplate = document.querySelector('.map__pins');
-// сэмулируем перетаскивание метки
-var mainPin = document.querySelector('.map__pin--main');
-mainPin.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
-  window.data.map.classList.remove('map--faded');
-  form.classList.remove('ad-form--disabled');
-  pinDelHidden();
-  disSelect();
-  disFieldset();
-
-  var coordsPin = {
-    x: evt.pageX,
-    y: evt.pageY
+  //  создание меток объявлений
+  var similarListElement = document.querySelector('.map__pins');
+  var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  window.pin = {
+    similarListElement: similarListElement
   };
 
-  var onMouseMov = function (moveEvt) {
-    moveEvt.preventDefault();
+  /**
+   * рендер меток
+   * @param  {Object} appartments[i]
+   * @param  {index} i
+   * @return {Object}
+   */
+  var renderPin = function (appartment, index) {
+    var pinElement = similarPinTemplate.cloneNode(true);
 
-    var shift = {
-      x: coordsPin.x - moveEvt.pageX,
-      y: coordsPin.y - moveEvt.pageY
-    };
+    pinElement.style.left = appartment.location.x + 'px';
+    pinElement.style.top = appartment.location.y + 'px';
+    pinElement.querySelector('img').src = appartment.author;
+    pinElement.querySelector('img').alt = appartment.offer.title;
+    pinElement.setAttribute('data-id', index);
 
-    var limits = {
-      top: window.data.map.offsetTop + mainPin.offsetHeight + 30,
-      right: window.data.map.offsetWidth + window.data.map.offsetLeft - mainPin.clientWidth / 2,
-      bottom: window.data.map.offsetHeight + window.data.map.offsetTop - mainPin.offsetHeight - 84,
-      left: window.data.map.offsetLeft + mainPin.clientWidth / 2
-    };
-
-    coordsPin = {
-      x: moveEvt.pageX,
-      y: moveEvt.pageY
-    };
-    // при движении изменяем координаты на которые указывает наш пин
-    var addressLeft = mainPin.offsetLeft + 32.5;
-    var addressTop = mainPin.offsetTop + 65;
-    inputAdress.value = addressLeft + '\, ' + addressTop;
-
-    if ((coordsPin.x > limits.left && coordsPin.x < limits.right) &&
-    (coordsPin.y > limits.top && coordsPin.y < limits.bottom)) {
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-    }
+    return pinElement;
   };
 
-  var onMouseUp = function (upEvt) {
-    upEvt.preventDefault();
-
-    document.removeEventListener('mousemove', onMouseMov);
-    document.removeEventListener('mouseup', onMouseUp);
-  };
-
-  document.addEventListener('mousemove', onMouseMov);
-  document.addEventListener('mouseup', onMouseUp);
-});
-
-// устанавливаем координаты на которые указывает наш пин
-var inputAdress = document.querySelector('#address');
-var addressLeft = mainPin.offsetLeft + 32.5;
-var addressTop = mainPin.offsetTop + 65;
-inputAdress.value = addressLeft + '\, ' + addressTop;
-
-// сделаем так, что бы при нажатии на пин отображалась соответствующая ему катрочка
-// соберем массив из элементов card__pin
-var mapCardArr = document.querySelectorAll('.map__card');
-
-// обработаем событие
-var оnOpen = function OnOpen() {
-  var loop = function loop(i) {
-    mapPins[i].addEventListener('click', function () {
-      mapCardArr[i - 1].classList.remove('hidden');
-    });
-  };
-
-  for (var i = 1; i < mapPins.length; i++) {
-    loop(i);
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < window.data.appartments.length; i++) {
+    fragment.appendChild(renderPin(window.data.appartments[i], i));
   }
-};
+
+  //  -----------------------------DRAG-N-DROP-----------------------
+  var pinHandler = document.querySelector('.map__pin--main');
+
+  pinHandler.addEventListener('mousedown', function (evt) {
+   evt.preventDefault();
+
+   var startCoords = {
+     x: evt.clientX,
+     y: evt.clientY
+   };
+
+   var activeState = false;
+
+   var onMouseMove = function (moveEvt) {
+     moveEvt.preventDefault();
+     if (!activeState) {
+       /**
+        * активация карты при перемещении главной метки
+        */
+        window.map.map.classList.remove('map--faded');
+        window.map.mainForm.classList.remove('ad-form--disabled');
+        for (var i = 0; i < window.map.formElements.length; i++) {
+          window.map.formElements[i].disabled = false;
+        }
+        similarListElement.appendChild(fragment);
+
+        window.map.addPinsClickHandler();
+
+        activeState = true;
+      }
+
+     var shift = {
+       x: startCoords.x - moveEvt.clientX,
+       y: startCoords.y - moveEvt.clientY
+     };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+     var mainPinHalf = 32;
+     var bodyRect = document.body.getBoundingClientRect();
+     var mapp = document.querySelector('.map__overlay');
+     var elemRect = mapp.getBoundingClientRect();
+     var offsetLeft   = elemRect.left - bodyRect.left;
+     var offsetTop   = elemRect.top - bodyRect.top;
+     var offsetRight   = elemRect.right - bodyRect.left;
+     var offsetBottom   = elemRect.bottom - bodyRect.top;
+
+     if (moveEvt.pageX < 200) {
+        pinHandler.style.top = (pinHandler.offsetTop - shift.y) + 'px';
+        pinHandler.style.left = (offsetLeft - mainPinHalf) + 'px';
+     } else if (moveEvt.pageY < 15) {
+        pinHandler.style.top = (offsetTop) + 'px';
+        pinHandler.style.left = (pinHandler.offsetLeft - shift.x) + 'px';
+     } else if (moveEvt.pageX > 1390) {
+        pinHandler.style.top = (pinHandler.offsetTop - shift.y) + 'px';
+        pinHandler.style.left = (offsetRight - mainPinHalf) + 'px';
+     } else if (moveEvt.pageY > 700) {
+        pinHandler.style.top = (offsetBottom - mainPinHalf) + 'px';
+        pinHandler.style.left = (pinHandler.offsetLeft - shift.x) + 'px';
+     } else {
+        pinHandler.style.top = (pinHandler.offsetTop - shift.y) + 'px';
+        pinHandler.style.left = (pinHandler.offsetLeft - shift.x) + 'px';
+     }
+
+     window.filter.fillAdress(pinHandler.offsetLeft, pinHandler.offsetTop);
+   };
+
+   var onMouseUp = function (upEvt) {
+     upEvt.preventDefault();
+
+     document.removeEventListener('mousemove', onMouseMove);
+     document.removeEventListener('mouseup', onMouseUp);
+
+   };
+
+   document.addEventListener('mousemove', onMouseMove);
+   document.addEventListener('mouseup', onMouseUp);
+  });
+
+  })();

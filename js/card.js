@@ -1,82 +1,50 @@
-  'use strict'
-  // создание массива авторов
+(function () {
+  'use strict';
 
-  var generatedPeoples = function (numberPeoples) {
-    var authors = [];
-    for (var i = 0; i < numberPeoples; i++) {
-      var people = {
-        author: {
-          avatar: 'img/avatars/user0' + randomNumber(1, 8) + '.png'
-        },
-        offer: {
-          title: houseDiscription[randomNumber(0, houseDiscription.length)],
-          address: '' + randomNumber(0, 3000) + '\, ' + randomNumber(0, 1500),
-          price: randomNumber(1000, 1000000),
-          type: houseType[randomNumber(0, 3)],
-          rooms: randomNumber(1, 5),
-          guests: randomNumber(1, 10),
-          checkin: checkin[randomNumber(0, 2)],
-          checkout: checkout[randomNumber(0, 2)],
-          features: newFeatures,
-          description: '',
-          photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-            'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-            'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-          ]
-        },
-        location: {
-          x: randomNumber(0, map.clientWidth),
-          y: randomNumber(130, 630)
-        }
-      };
-      authors.push(people);
+  //  создание карточки объявления
+  var similarCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
+  /**
+   * генерация карточки объявления
+   * @param {Object} appartment
+   * @return {HTMLDomNode}
+   */
+  var renderCard = function (appartment) {
+    var cardElement = similarCardTemplate.cloneNode(true);
+
+    cardElement.querySelector('.popup__avatar').src = appartment.author;
+    cardElement.querySelector('.popup__title').textContent = appartment.offer.title;
+    cardElement.querySelector('.popup__text--address').textContent = appartment.offer.address;
+    cardElement.querySelector('.popup__text--price').textContent = appartment.offer.price + '₽/ночь';
+    cardElement.querySelector('.popup__type').textContent = window.data.APPARTMENT_TYPES[appartment.offer.type];
+    cardElement.querySelector('.popup__text--capacity').textContent = appartment.offer.rooms + ' комнаты для ' + appartment.offer.guests + ' гостей';
+    cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + appartment.offer.checkin + ',' + ' выезд до ' + appartment.offer.checkout;
+
+    cardElement.querySelector('.popup__features').innerHTML = '';
+    for (var j = 0; j < appartment.offer.features.length; j++) {
+      var elementLi = document.createElement('li');
+      elementLi.className = 'popup__feature popup__feature--' + appartment.offer.features[j];
+      cardElement.querySelector('.popup__features').appendChild(elementLi);
     }
-    return authors;
-  };
 
-  var peoples = generatedPeoples(7);
+    cardElement.querySelector('.popup__description').textContent = appartment.offer.description;
 
-  // добавление дополнительных картинок в card
-
-  var cardImage = document.querySelector('#card')
-    .content
-    .querySelector('.popup__photos');
-
-  var cardImg = document.querySelector('#card')
-    .content
-    .querySelector('.popup__photos')
-    .querySelector('.popup__photo');
-
-
-  var cardImageTemplate = function () {
-    for (var z = 1; z < 3; z++) {
-      var cardImageTemp = cardImg.cloneNode(true);
-      cardImageTemp.src = peoples[0].offer.photos[z];
-      cardImage.appendChild(cardImageTemp);
+    cardElement.querySelector('.popup__photos').innerHTML = '';
+    for (var i = 0; i < window.data.PHOTOS.length; i++) {
+      var elementImg = document.createElement('img');
+      elementImg.className = 'popup__photo';
+      elementImg.src = appartment.offer.photos[i];
+      elementImg.width = 45;
+      elementImg.height = 40;
+      cardElement.querySelector('.popup__photos').appendChild(elementImg);
+      cardElement.querySelector('.popup__photos').querySelector('img').src = appartment.offer.photos[i];
     }
+
+    return cardElement;
   };
 
-  cardImageTemplate();
-
-  // изменение удобств ['palace', 'flat', 'house', 'bungalo'];
-
-  var convertType = function () {
-    var type = houseType[randomNumber(0, houseType.length - 1)];
-    if (type === 'palace') {
-      type = 'Дворец';
-    } else if (type === 'flat') {
-      type = 'Квартира';
-    } else if (type === 'house') {
-      type = 'Дом';
-    } else {
-      type = 'Бунгало';
-    }
-    return type;
+  window.card = {
+    renderCard: renderCard
   };
 
-  window.data = {
-    convertType: convertType,
-    peoples: peoples,
-    map: map
-  };
-})();
+  })();
