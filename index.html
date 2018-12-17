@@ -8,13 +8,16 @@
   <title>Кексобукинг</title>
 </head>
 <body>
+
   <main>
     <div class="promo">
       <h1 class="promo__title visually-hidden">Keksobooking. Кексы по соседству</h1>
       <img src="img/keksobooking.svg" alt="Keksobooking. Кексы по соседству" width="215" height="45">
     </div>
+
     <!-- Карта объявлений -->
     <section class="map map--faded">
+
       <!-- Метки объявлений -->
       <div class="map__pins">
         <div class="map__overlay">
@@ -31,6 +34,7 @@
           </svg>
         </button>
       </div>
+
       <!-- Фильтрация объявлений -->
       <div class="map__filters-container">
         <form action="#" class="map__filters" autocomplete="off">
@@ -76,10 +80,11 @@
         </form>
       </div>
     </section>
+
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <form class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off" action="https://1510.dump.academy/keksobooking">
+      <form class="ad-form ad-form--disabled" method="post" action="https://js.dump.academy/keksobooking" enctype="multipart/form-data" autocomplete="off">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Ваша фотография (для карты)</legend>
           <div class="ad-form-header__upload">
@@ -95,16 +100,15 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио"
-          minlength="10" maxlength="50" required>
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес</label>
-          <input id="address" name="address" type="text" required>
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
-          <select id="type" name="type" required>
+          <select id="type" name="type">
             <option value="bungalo">Бунгало</option>
             <option value="flat" selected>Квартира</option>
             <option value="house">Дом</option>
@@ -113,7 +117,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000" required>
+          <input id="price" name="price" type="number" placeholder="5000" min="1000" max="1000000" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Время заезда и выезда</label>
@@ -140,9 +144,9 @@
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
-            <option value="3" selected>для 3 гостей</option>
+            <option value="3">для 3 гостей</option>
             <option value="2">для 2 гостей</option>
-            <option value="1">для 1 гостя</option>
+            <option value="1" selected>для 1 гостя</option>
             <option value="0">не для гостей</option>
           </select>
         </fieldset>
@@ -182,6 +186,7 @@
       </form>
     </section>
   </main>
+
   <footer class="footer container">
     <div class="footer__copyright copyright">
       <a class="copyright__link copyright__link--image" href="https://htmlacademy.ru/intensive/javascript">
@@ -196,6 +201,7 @@
       <li><a href="https://vk.com/htmlacademy" class="contacts__link contacts__link--vk">VK</a></li>
     </ul>
   </footer>
+
   <!-- Модальное окно с информацией об объявлении -->
   <template id="card">
     <article class="map__card popup">
@@ -221,18 +227,19 @@
       </div>
     </article>
   </template>
+
   <!-- Метка объявления -->
   <template id="pin">
-    <button type="button" class="map__pin" style="left: 200px; top: 400px;">
-      <img src="img/avatars/user07.png" width="40" height="40" draggable="false" alt="Метка объявления">
-    </button>
+    <button type="button" class="map__pin" style="left: 200px; top: 400px;"><img src="img/avatars/user07.png" width="40" height="40" draggable="false" alt="Метка объявления"></button>
   </template>
+
   <!-- Сообщение об успешном создании объявления -->
   <template id="success">
     <div class="success">
       <p class="success__message">Ваше объявление<br>успешно размещено!</p>
     </div>
   </template>
+
   <!-- Сообщение об ошибке создания объеявления -->
   <template id="error">
     <div class="error">
@@ -240,8 +247,12 @@
       <button class="error__button" href="#">Попробовать снова</button>
     </div>
   </template>
-  <script src="js/main.js"></script>
+
+  <script src="js/data.js"></script>
   <script src="js/map.js"></script>
-  <script src="js/validForm.js"></script>
+  <script src="js/pin.js"></script>
+  <script src="js/card.js"></script>
+  <script src="js/filter.js"></script>
+
 </body>
 </html>
