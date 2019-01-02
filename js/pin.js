@@ -1,39 +1,23 @@
+'use strict';
+
 (function () {
-  'use strict';
-
-  //  создание меток объявлений
-  var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
-  /**
-   * рендер меток
-   * @param  {Object} appartments[i]
-   * @param  {index} i
-   * @return {Object}
-   */
-  var renderPin = function (appartment, index) {
-    var pinElement = similarPinTemplate.cloneNode(true);
-
-    pinElement.style.left = appartment.location.x + 'px';
-    pinElement.style.top = appartment.location.y + 'px';
-    pinElement.querySelector('img').src = appartment.author.avatar;
-    pinElement.querySelector('img').alt = appartment.offer.title;
-    pinElement.setAttribute('data-id', index);
-
-    return pinElement;
-  };
-
-  var render = function() {
-    var appartments = window.data.appartments;
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < appartments.length; i++) {
-      fragment.appendChild(renderPin(appartments[i], i));
-    }
-    window.map.similarListElement.appendChild(fragment);
-  };
+  var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 
   window.pin = {
-    render: render
+    WIDTH_PIN: 62,
+    HEIGHT_PIN: 82,
+
+    generatePin: function (pinData) {
+      var clonePin = templatePin.cloneNode(true);
+      var image = clonePin.querySelector('img');
+
+      clonePin.style.left = pinData.location.x - window.pin.WIDTH_PIN / 2 + 'px';
+      clonePin.style.top = pinData.location.y - window.pin.HEIGHT_PIN + 'px';
+      clonePin.setAttribute('pin-id', pinData.id);
+      image.src = pinData.author.avatar;
+      image.alt = pinData.offer.title;
+
+      return clonePin;
+    }
   };
-
-
 })();
