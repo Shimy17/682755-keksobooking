@@ -62,11 +62,11 @@
     fillCard(offer);
   };
 
-  var removeCard = function () {
+  var onRemoveCard = function () {
     card.remove();
   };
 
-  cardClose.addEventListener('click', removeCard);
+  cardClose.addEventListener('click', onRemoveCard);
 
   window.cards = {
     renderCard: renderCard,

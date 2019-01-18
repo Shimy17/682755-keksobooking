@@ -27,7 +27,7 @@
     }
   };
 
-  var dragPinMain = function (evt) {
+  var onDragPinMain = function (evt) {
     pinMainCoords.x = parseInt(pinMain.style.left, 10);
     pinMainCoords.y = parseInt(pinMain.style.top, 10);
     mouseCoords.x = evt.clientX;
@@ -54,5 +54,5 @@
     document.removeEventListener('mouseup', onPinMainMouseUp);
   };
 
-  pinMain.addEventListener('mousedown', dragPinMain);
+  pinMain.addEventListener('mousedown', onDragPinMain);
 })();

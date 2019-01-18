@@ -19,13 +19,13 @@
     }
   };
 
-  var activatePage = function () {
+  var onActivatePage = function () {
     window.backend.getData();
     window.generalElements.map.classList.remove('map--faded');
     window.generalElements.adForm.classList.remove('ad-form--disabled');
     activateInputs(adFormElements);
     window.adForm.setToDefault();
-    window.generalElements.pinMain.removeEventListener('mousedown', activatePage);
+    window.generalElements.pinMain.removeEventListener('mousedown', onActivatePage);
   };
 
   var resetToDefault = function () {
@@ -37,7 +37,7 @@
     window.adForm.setToDefault();
     window.pins.removePins();
     window.cards.removeCard();
-    window.generalElements.pinMain.addEventListener('mousedown', activatePage);
+    window.generalElements.pinMain.addEventListener('mousedown', onActivatePage);
   };
 
   window.generalElements.adForm.addEventListener('reset', function () {
@@ -47,7 +47,7 @@
   resetToDefault();
 
   window.main = {
-    activatePage: activatePage,
+    onActivatePage: onActivatePage,
     resetToDefault: resetToDefault,
     activateInputs: activateInputs
   };

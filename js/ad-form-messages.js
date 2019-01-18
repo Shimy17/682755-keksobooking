@@ -3,15 +3,22 @@
 (function () {
   var main = document.querySelector('main');
   var onSubmit = function (message) {
-    var closeMessage = function (evt) {
-      if (evt.type === 'click' || evt.key === 'Escape') {
-        message.removeEventListener('click', closeMessage);
-        document.removeEventListener('keydown', closeMessage);
+    var onCloseMessage = function (evt) {
+      if (evt.type === 'click') {
+        message.removeEventListener('click', onCloseMessage);
+        document.removeEventListener('keydown', onCloseMessage);
+        main.removeChild(message);
+      }
+      ;
+      var onCloseMessage = function (evnt) {
+      if (evt.key === 'Esc') {
+        message.removeEventListener('click', onCloseMessage);
+        document.removeEventListener('keydown', onCloseMessage);
         main.removeChild(message);
       }
     };
-    message.addEventListener('click', closeMessage);
-    document.addEventListener('keydown', closeMessage);
+    message.addEventListener('click', onCloseMessage);
+    document.addEventListener('keydown', onCloseMessage);
     main.appendChild(message);
   };
 
