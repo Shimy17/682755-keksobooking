@@ -62,14 +62,14 @@
     fillCard(offer);
   };
 
-  var onRemoveCard = function () {
+  var removeCard = function () {
     card.remove();
   };
 
-  cardClose.addEventListener('click', onRemoveCard);
+  cardClose.addEventListener('click', removeCard);
 
   window.cards = {
-    renderCard: renderCard,
-    removeCard: removeCard
-  };
+    render: renderCard,
+    remove: removeCard
+    };
 })();
