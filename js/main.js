@@ -35,8 +35,8 @@
     disableInputs(filterElements);
     window.pinMain.setToDefault();
     window.adForm.setToDefault();
-    window.pins.removePins();
-    window.cards.removeCard();
+    window.pins.remove();
+    window.cards.remove();
     window.generalElements.pinMain.addEventListener('mousedown', onActivatePage);
   };
 

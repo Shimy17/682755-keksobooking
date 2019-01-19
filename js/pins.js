@@ -100,7 +100,7 @@
   };
 
   window.pins = {
-    renderPins: renderPins,
-    removePins: removePins
-  };
+    render: renderPins,
+    remove: removePins
+    };
 })();
