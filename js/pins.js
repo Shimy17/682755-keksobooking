@@ -23,7 +23,7 @@
     pin.firstChild.setAttribute('src', offerObject.author.avatar);
     pin.firstChild.setAttribute('alt', offerObject.offer.title);
     pin.addEventListener('click', function () {
-      window.cards.renderCard(offerObject);
+      window.cards.render(offerObject);
     });
     return pin;
   };
