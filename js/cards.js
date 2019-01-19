@@ -49,10 +49,10 @@
     cardType.textContent = housingType[offerObject.offer.type] ? housingType[offerObject.offer.type] : 'Неведомый теремок';
     cardCapacity.textContent = getCardCapacityString(offerObject.offer.rooms, offerObject.offer.guests);
     cardTime.textContent = 'Заезд после ' + offerObject.offer.checkin + ', выезд до ' + offerObject.offer.checkout + '.';
-    cardFeatures.innerHTML = "";
+    cardFeatures.innerHTML = '';
     offerObject.offer.features.forEach(function (feature) {
-    cardFeatures.innerHTML += '<li class="popup__feature popup__feature--' + feature + '"></li>';
-    })
+      cardFeatures.innerHTML += '<li class="popup__feature popup__feature--' + feature + '"></li>';
+    });
     cardDescription.textContent = offerObject.offer.description;
     setCardPhotos(offerObject.offer.photos);
     cardAvatar.src = offerObject.author.avatar;

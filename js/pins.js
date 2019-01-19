@@ -102,5 +102,5 @@
   window.pins = {
     render: renderPins,
     remove: removePins
-    };
+  };
 })();
