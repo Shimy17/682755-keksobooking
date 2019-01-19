@@ -1,102 +1,57 @@
 'use strict';
 
+/* Модуль filter.js */
 (function () {
-  var OFFERS_LIMIT = 5;
-  var filtersForm = document.querySelector('.map__filters');
+  var filter = window.generalElements.filter;
+  var filterElements = filter.elements;
+  var housingFeatures = filterElements['features'];
+  var lastTimout;
 
-  var PriceMap = {
-    low: {
-      min: 0,
-      max: 10000
-    },
+  var setHousingFeatures = function () {
+    var selectedFeatures = Array.prototype.reduce.call(housingFeatures, function (features, feature) {
+      return feature.checked ? features.concat(feature.value) : features;
+    }, []);
+    return selectedFeatures.length > 0 ? selectedFeatures : null;
+  };
 
-    middle: {
-      min: 10000,
-      max: 50000
-    },
+  var namesToProperties = {
+    'housing-type': 'type',
+    'housing-price': 'price',
+    'housing-rooms': 'rooms',
+    'housing-guests': 'guests'
+  };
 
-    high: {
-      min: 50000,
-      max: Infinity
-    },
+  var checkValue = function (value) {
+    return !value || value === 'any' ? null : value;
+  };
 
-    any: {
-      min: 0,
-      max: Infinity
+  var updateFilterData = function () {
+    window.filterData = {};
+    var features = setHousingFeatures();
+    if (features && features.length) {
+      window.filterData.features = features;
     }
+    for (var name in namesToProperties) {
+      if (namesToProperties.hasOwnProperty(name)) {
+        if (checkValue(filterElements[name].value)) {
+          if (namesToProperties[name] !== 'type' && namesToProperties[name] !== 'price') {
+            window.filterData[namesToProperties[name]] = parseInt(filterElements[name].value, 10);
+          } else {
+            window.filterData[namesToProperties[name]] = filterElements[name].value;
+          }
+        }
+      }
+    }
+    window.pins.renderPins();
+    window.cards.removeCard();
   };
 
-
-  var setOffersLimit = function (data, limit) {
-    return data.slice(0, limit);
-  };
-
-  var applyFilter = function (filters) {
-    var houseType = filters['housing-type'];
-    var price = filters['housing-price'];
-    var rooms = filters['housing-rooms'];
-    var guests = filters['housing-guests'];
-
-    var filterFeatures = function (data) {
-      var featuresMatch = true;
-      var selectedFeatures = filtersForm.querySelectorAll('input[type="checkbox"]:checked');
-
-      selectedFeatures.forEach(function (item) {
-        if (data.offer.features.indexOf(item.value) === -1) {
-          featuresMatch = false;
-        }
-      });
-
-      return featuresMatch;
-    };
-
-    var completeFilter = window.data.completeOffers
-      .filter(function (item) {
-        return item.offer.price >= PriceMap[price.value].min &&
-          item.offer.price <= PriceMap[price.value].max;
-      })
-      .filter(function (item) {
-        var current = houseType.options[houseType.selectedIndex].value;
-
-        if (current !== 'any') {
-          return item.offer.type === current;
-        }
-        return true;
-      })
-      .filter(function (item) {
-        if (rooms.value !== 'any') {
-          return item.offer.rooms === Number(rooms.value);
-        }
-        return true || item.offer.rooms === 0;
-      })
-      .filter(function (item) {
-        if (guests.value !== 'any') {
-          return item.offer.guests === Number(guests.value);
-        }
-        return true || item.offer.guests === 0;
-      })
-      .filter(function (item) {
-        return filterFeatures(item);
-      });
-
-    completeFilter = setOffersLimit(completeFilter, OFFERS_LIMIT);
-
-    window.map.closeCard();
-    window.map.deletePins();
-    window.map.renderPin(completeFilter);
-  };
-
-  filtersForm.addEventListener('change', function () {
-    var filters = filtersForm.children;
-
-    window.debounce(function () {
-      applyFilter(filters);
-    });
+  filter.addEventListener('change', function () {
+    if (lastTimout) {
+      window.clearTimeout(lastTimout);
+    }
+    lastTimout = setTimeout(updateFilterData, 500);
   });
 
-
-  window.filter = {
-    OFFERS_LIMIT: OFFERS_LIMIT,
-    setOffersLimit: setOffersLimit
-  };
+  window.filterData = {};
 })();
