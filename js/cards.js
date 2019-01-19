@@ -66,10 +66,12 @@
     card.remove();
   };
 
-  cardClose.addEventListener('click', removeCard);
+  cardClose.addEventListener('click', function () {
+    removeCard();
+  });
 
   window.cards = {
     render: renderCard,
     remove: removeCard
-    };
+  };
 })();

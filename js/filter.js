@@ -42,8 +42,8 @@
         }
       }
     }
-    window.pins.renderPins();
-    window.cards.removeCard();
+    window.pins.remove()
+    window.cards.remove()
   };
 
   filter.addEventListener('change', function () {
