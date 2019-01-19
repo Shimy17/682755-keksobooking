@@ -9,13 +9,13 @@
 
   var pinMain = window.generalElements.pinMain;
 
-  var startingCoords = {
+  var startPosition = {
     x: pinMain.style.left,
     y: pinMain.style.top
   };
 
-  var currentCoords = {
-    updateCoords: function () {
+  var currentPosition = {
+    updatePosition: function () {
       this.x = pinMain.style.left;
       this.y = pinMain.style.top;
       window.adForm.currentHousingAddress.updateHousingAddress(parseInt(this.x, 10), parseInt(this.y, 10));
@@ -23,15 +23,15 @@
   };
 
   var setToDefault = function () {
-    pinMain.style.left = startingCoords.x;
-    pinMain.style.top = startingCoords.y;
-    currentCoords.updateCoords();
+    pinMain.style.left = startPosition.x;
+    pinMain.style.top = startPosition.y;
+    currentPosition.updatePosition();
   };
 
   window.pinMain = {
     AddressOffset: AddressOffset,
-    startingCoords: startingCoords,
-    currentCoords: currentCoords,
+    startPosition: startPosition,
+    currentPosition: currentPosition,
     setToDefault: setToDefault,
   };
 })();

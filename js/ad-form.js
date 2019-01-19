@@ -26,10 +26,10 @@
   };
 
   var currentHousingAddress = {
-    updateHousingAddress: function (coordsX, coordsY) {
-      if (coordsX && coordsY) {
-        this.x = coordsX + window.pinMain.AddressOffset.X;
-        this.y = coordsY + window.pinMain.AddressOffset.Y;
+    updateHousingAddress: function (PositionX, PositionY) {
+      if (PositionX && PositionY) {
+        this.x = PositionX + window.pinMain.AddressOffset.X;
+        this.y = PositionY + window.pinMain.AddressOffset.Y;
       }
       housingAddress.value = this.x + ', ' + this.y;
     }
@@ -93,7 +93,7 @@
     validateGuests(roomsSelect.value);
   });
 
-  currentHousingAddress.updateHousingAddress(parseInt(window.pinMain.startingCoords.x, 10), parseInt(window.pinMain.startingCoords.y, 10));
+  currentHousingAddress.updateHousingAddress(parseInt(window.pinMain.startPosition.x, 10), parseInt(window.pinMain.startPosition.y, 10));
 
   window.adForm = {
     currentHousingAddress: currentHousingAddress,

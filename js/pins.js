@@ -8,7 +8,7 @@
   var pinsFragment = document.createDocumentFragment();
   var suitedOffers;
 
-  var getPinCoords = function (location) {
+  var getPinPosition = function (location) {
     return {
       x: location.x - PIN_WIDTH / 2 + 'px',
       y: location.y - PIN_HEIGHT + 'px'
@@ -17,9 +17,9 @@
 
   var createPin = function (offerObject) {
     var pin = pinTemplate.cloneNode(true);
-    var pinCoords = getPinCoords(offerObject.location);
-    pin.style.left = pinCoords.x;
-    pin.style.top = pinCoords.y;
+    var pinPosition = getPinPosition(offerObject.location);
+    pin.style.left = pinPosition.x;
+    pin.style.top = pinPosition.y;
     pin.firstChild.setAttribute('src', offerObject.author.avatar);
     pin.firstChild.setAttribute('alt', offerObject.offer.title);
     pin.addEventListener('click', function () {
