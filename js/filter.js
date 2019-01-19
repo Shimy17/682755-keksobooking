@@ -33,16 +33,16 @@
     }
     for (var name in namesToProperties) {
       if (namesToProperties.hasOwnProperty(name) && checkValue(filterElements[name].value)) {
-        if (checkValue(filterElements[name].value)) {
           if (namesToProperties[name] !== 'type' && namesToProperties[name] !== 'price') {
             window.filterData[namesToProperties[name]] = parseInt(filterElements[name].value, 10);
           } else {
             window.filterData[namesToProperties[name]] = filterElements[name].value;
-          }
         }
       }
     }
+
     window.pins.remove()
+    window.pins.render()
     window.cards.remove()
   };
 
