@@ -26,10 +26,10 @@
   };
 
   var currentHousingAddress = {
-    updateHousingAddress: function (PositionX, PositionY) {
-      if (PositionX && PositionY) {
-        this.x = PositionX + window.pinMain.AddressOffset.X;
-        this.y = PositionY + window.pinMain.AddressOffset.Y;
+    updateHousingAddress: function (positionX, positionY) {
+      if (positionX && positionY) {
+        this.x = positionX + window.pinMain.AddressOffset.X;
+        this.y = positionY + window.pinMain.AddressOffset.Y;
       }
       housingAddress.value = this.x + ', ' + this.y;
     }
